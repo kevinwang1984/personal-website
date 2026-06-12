@@ -338,8 +338,6 @@ function update(g,now){
     return;
   }
   if(g.state==='waveComplete'){
-    g.stateTimer--;
-    if(g.stateTimer<=0){g.nextWave();g.state='waveIntro';g.stateTimer=50}
     return;
   }
   if(g.state!=='playing') return;
@@ -529,7 +527,7 @@ function render(g){
     ctx.fillStyle='#fff';ctx.font='bold 22px "Courier New",monospace';
     ctx.fillText('总分: '+g.score,W/2,348);
     ctx.fillStyle='rgba(255,255,255,0.4)';ctx.font='14px "Courier New",monospace';
-    ctx.fillText('按任意键进入下一关  ('+Math.ceil(g.stateTimer/60)+'s)',W/2,390);
+    ctx.fillText('点击或按任意键继续',W/2,390);
   }
   // Wave Intro screen
   if(g.state==='waveIntro'){
@@ -569,6 +567,7 @@ function startGame(){
   const loop=(now)=>{update(game,now);render(game);animFrame=requestAnimationFrame(loop)};
   animFrame=requestAnimationFrame(loop);
 }
+canvas.addEventListener('click',e=>{if(game&&game.state==='waveComplete'){game.nextWave();game.state='waveIntro';game.stateTimer=50}});
 document.addEventListener('keydown',e=>{
   if(game)game.keys[e.key]=true;
   if(e.key==='r'||e.key==='R')startGame();
