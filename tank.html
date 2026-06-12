@@ -178,15 +178,16 @@ class Tank{
     const s=this.size,x=this.x,y=this.y,t=this.type;
     if(this.invincible>0&&Math.floor(this.invincible/3)%2===0) return;
     ctx.save();
+    // Player uses blue colors
+    const pCol=this.isPlayer?{track:'#1e3a5f',body:'#3b82f6',accent:'#60a5fa',barrel:'#2563eb'}:null;
     // Tracks
-    ctx.fillStyle=t.trackColor;
+    ctx.fillStyle=pCol?pCol.track:t.trackColor;
     if(this.dir===DIR.UP||this.dir===DIR.DOWN){
       ctx.fillRect(x+2,y,5,s);ctx.fillRect(x+s-7,y,5,s);
     }else{
       ctx.fillRect(x,y+2,s,5);ctx.fillRect(x,y+s-7,s,5);
     }
-    // Body
-    ctx.fillStyle=t.bodyColor;
+    ctx.fillStyle=pCol?pCol.body:t.bodyColor;
     if(t.id==='fast'){
       // Angular body for fast tank
       ctx.beginPath();
@@ -200,12 +201,10 @@ class Tank{
     }else{
       ctx.fillRect(x+4,y+4,s-8,s-8);
     }
-    // Turret center
-    ctx.fillStyle=t.accentColor;
+    ctx.fillStyle=pCol?pCol.accent:t.accentColor;
     const r=t.id==='heavy'?8:6;
     ctx.beginPath();ctx.arc(x+s/2,y+s/2,r,0,Math.PI*2);ctx.fill();
-    // Barrel
-    ctx.fillStyle=t.barrelColor;
+    ctx.fillStyle=pCol?pCol.barrel:t.barrelColor;
     const bl=this.isPlayer?11:t.id==='heavy'?12:10;
     const bw=t.id==='fast'?4:6;
     const bx=x+s/2+DX[this.dir]*bl,by=y+s/2+DY[this.dir]*bl;
