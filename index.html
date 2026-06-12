@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人网站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Timeline Overlay -->
+<div class="timeline-overlay" id="timelineOverlay">
+  <button class="timeline-skip" id="timelineSkip">跳过</button>
+  <div class="timeline-container">
+    <h2 class="timeline-title">我的历程</h2>
+    <div class="timeline-track">
+      <div class="timeline-line" id="timelineLine"></div>
+      <div class="timeline-items" id="timelineItems"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="logo">Portfolio</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">关于</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-avatar">
+      <div class="avatar-placeholder">W</div>
+    </div>
+    <h1>你好，我是 <span class="highlight">开发者</span></h1>
+    <p class="hero-subtitle">全栈工程师 · 热爱创造 · 持续学习</p>
+    <p class="hero-desc">专注于构建优雅、高效的 Web 应用，用代码把想法变成现实。</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">查看项目</a>
+      <a href="#contact" class="btn btn-outline">联系我</a>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section" id="about">
+  <div class="container">
+    <h2 class="section-title">关于我</h2>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>我是一名充满热情的全栈开发者，拥有多年 Web 开发经验。从前端交互到后端架构，我享受构建完整产品的每一个环节。</p>
+        <p>我相信好的代码不仅是能运行的代码，更是可维护、可扩展的代码。在工作中我始终坚持最佳实践，追求代码质量与用户体验的平衡。</p>
+        <p>工作之余，我喜欢参与开源项目、写技术博客，以及探索新的技术方向。</p>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">5+</span>
+            <span class="stat-label">年经验</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">50+</span>
+            <span class="stat-label">完成项目</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">30+</span>
+            <span class="stat-label">开源贡献</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-image fade-in">
+        <div class="image-placeholder">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <p>个人照片</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section class="section section-alt" id="skills">
+  <div class="container">
+    <h2 class="section-title">技能</h2>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>前端开发</h3>
+        <p>React, Vue, TypeScript, HTML/CSS, 响应式设计</p>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>后端开发</h3>
+        <p>Node.js, Python, Go, RESTful API, 微服务架构</p>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <h3>数据库</h3>
+        <p>PostgreSQL, MySQL, MongoDB, Redis, 数据建模</p>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <h3>DevOps</h3>
+        <p>Docker, CI/CD, AWS/阿里云, Linux 运维</p>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3>工具链</h3>
+        <p>Git, Webpack/Vite, Jest, Figma, 性能优化</p>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>产品设计</h3>
+        <p>UI/UX 设计, 原型设计, 用户研究, A/B 测试</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="section" id="projects">
+  <div class="container">
+    <h2 class="section-title">项目</h2>
+    <div class="projects-grid">
+      <div class="project-card fade-in">
+        <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <span class="project-tag">React</span>
+        </div>
+        <div class="project-body">
+          <h3>电商管理后台</h3>
+          <p>基于 React + TypeScript 的全功能管理后台，支持实时数据看板、用户权限管理和订单追踪。</p>
+          <div class="project-links">
+            <a href="#" class="project-link">查看演示 →</a>
+            <a href="#" class="project-link">源代码</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+          <span class="project-tag">Node.js</span>
+        </div>
+        <div class="project-body">
+          <h3>实时协作平台</h3>
+          <p>基于 WebSocket 的多人实时协作编辑工具，支持文档同步、版本控制和评论讨论。</p>
+          <div class="project-links">
+            <a href="#" class="project-link">查看演示 →</a>
+            <a href="#" class="project-link">源代码</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <span class="project-tag">Python</span>
+        </div>
+        <div class="project-body">
+          <h3>AI 内容生成器</h3>
+          <p>基于 LLM 的智能内容生成工具，支持文章摘要、代码注释和数据分析报告自动生成。</p>
+          <div class="project-links">
+            <a href="#" class="project-link">查看演示 →</a>
+            <a href="#" class="project-link">源代码</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section section-alt" id="contact">
+  <div class="container">
+    <h2 class="section-title">联系我</h2>
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <div class="contact-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>hello@example.com</span>
+        </div>
+        <div class="contact-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>中国 · 北京</span>
+        </div>
+        <div class="contact-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>github.com/username</span>
+        </div>
+      </div>
+      <form class="contact-form fade-in" id="contactForm">
+        <div class="form-group">
+          <label for="name">姓名</label>
+          <input type="text" id="name" placeholder="你的名字" required>
+        </div>
+        <div class="form-group">
+          <label for="email">邮箱</label>
+          <input type="email" id="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="message">留言</label>
+          <textarea id="message" rows="4" placeholder="想说的话..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">发送消息</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Portfolio. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
