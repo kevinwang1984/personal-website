@@ -386,7 +386,6 @@ function update(g,now){
         hp-=b.wallDamage;
         if(hp<=0){
           map[row][col]=0;delete wallHp[key];
-          explosions.push(new Explosion(col*TILE+TILE/2,row*TILE+TILE/2,tile===4));
         }else{
           wallHp[key]=hp;
         }
@@ -395,7 +394,6 @@ function update(g,now){
         b.alive=false;continue;
       }else if(tile===3){
         map[row][col]=0;b.alive=false;
-        explosions.push(new Explosion(col*TILE+TILE/2,row*TILE+TILE/2,true));
         g.state='gameover';continue;
       }
     }
@@ -408,7 +406,6 @@ function update(g,now){
           if(e.takeDamage(b.pDamage)){
             g.score+=e.type.score;g.enemiesKilled++;
             g.killCounts[e.type.id.toUpperCase()]++;
-            explosions.push(new Explosion(e.cx,e.cy,true));
           }
           break;
         }
@@ -417,7 +414,6 @@ function update(g,now){
       if(b.x<player.x+player.size&&b.x+b.size>player.x&&b.y<player.y+player.size&&b.y+b.size>player.y){
         b.alive=false;
         if(player.takeDamage(b.pDamage)){
-          explosions.push(new Explosion(player.cx,player.cy,true));
           g.lives--;
           if(g.lives<=0){player.alive=false;g.state='gameover'}
           else{
@@ -437,7 +433,6 @@ function update(g,now){
   // Wave check
   if(g.enemiesKilled>=g.ENEMIES_PER_WAVE&&g.enemies.filter(e=>e.alive).length===0){
     g.state='waveComplete';g.stateTimer=300;
-    explosions.push(new Explosion(W/2,H/2,true));
   }
 }
 
