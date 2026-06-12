@@ -89,17 +89,17 @@ const PLAYER_MAX_HP=100;
 const MAP_TEMPLATE=[
   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
   [2,0,0,0,0,5,5,0,0,0,0,0,0,5,5,0,0,0,0,2],
-  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+  [2,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,2],
   [2,0,0,1,1,0,0,4,0,0,0,0,4,0,0,1,1,0,0,2],
   [2,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,2],
   [2,0,5,0,0,5,0,1,0,0,0,0,1,0,5,0,0,5,0,2],
-  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+  [2,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,2],
   [2,0,0,4,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,2],
   [2,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,2],
   [2,0,5,0,0,5,0,1,0,0,0,0,1,0,5,0,0,5,0,2],
-  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+  [2,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,2],
   [2,0,0,1,1,0,0,4,0,0,0,0,4,0,0,1,1,0,0,2],
-  [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+  [2,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,2],
   [2,0,0,0,0,0,0,1,1,3,3,1,1,0,0,0,0,0,0,2],
   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 ];
@@ -261,7 +261,7 @@ let game=null;
 function createGame(){
   const map=MAP_TEMPLATE.map(r=>[...r]);
   const wallHp=initWallHp(map);
-  const player=new Tank(9*TILE+4,12*TILE+4,DIR.UP,TANK_TYPES.MEDIUM,true);
+  const player=new Tank(4*TILE+4,12*TILE+4,DIR.UP,TANK_TYPES.MEDIUM,true);
   player.hp=PLAYER_MAX_HP;player.maxHp=PLAYER_MAX_HP;
   return{
     map,wallHp,player,
@@ -382,7 +382,7 @@ function update(g,now){
           g.lives--;
           if(g.lives<=0){player.alive=false;g.state='gameover'}
           else{
-            player.x=9*TILE+4;player.y=12*TILE+4;player.dir=DIR.UP;
+            player.x=4*TILE+4;player.y=12*TILE+4;player.dir=DIR.UP;
             player.hp=PLAYER_MAX_HP;player.invincible=120;
             explosions.push(new Explosion(player.cx,player.cy,false));
           }
@@ -496,10 +496,12 @@ function render(g){
 }
 
 // ===================== Main =====================
+let animFrame=null;
 function startGame(){
+  if(animFrame)cancelAnimationFrame(animFrame);
   game=createGame();game.nextWave();
-  const loop=(now)=>{update(game,now);render(game);requestAnimationFrame(loop)};
-  requestAnimationFrame(loop);
+  const loop=(now)=>{update(game,now);render(game);animFrame=requestAnimationFrame(loop)};
+  animFrame=requestAnimationFrame(loop);
 }
 document.addEventListener('keydown',e=>{
   if(game)game.keys[e.key]=true;
