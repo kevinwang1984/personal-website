@@ -317,6 +317,7 @@ function update(g,now){
   for(const e of enemies){
     if(!e.alive) continue;
     e.aiTimer--;e.aiFireTimer--;
+    if(e.invincible>0) e.invincible--;
     if(e.aiTimer<=0){
       e.aiDir=Math.floor(Math.random()*4);
       e.aiTimer=40+Math.floor(Math.random()*80);
@@ -348,8 +349,6 @@ function update(g,now){
           explosions.push(new Explosion(col*TILE+TILE/2,row*TILE+TILE/2,tile===4));
         }else{
           wallHp[key]=hp;
-          // Show spark
-          explosions.push(new Explosion(cx,cy,false));
         }
         b.alive=false;continue;
       }else if(tile===2){
@@ -369,8 +368,6 @@ function update(g,now){
           if(e.takeDamage(b.pDamage)){
             g.score+=e.type.score;g.enemiesKilled++;
             explosions.push(new Explosion(e.cx,e.cy,true));
-          }else{
-            explosions.push(new Explosion(b.cx,b.cy,false));
           }
           break;
         }
@@ -385,10 +382,7 @@ function update(g,now){
           else{
             player.x=4*TILE+4;player.y=12*TILE+4;player.dir=DIR.UP;
             player.hp=PLAYER_MAX_HP;player.invincible=120;
-            explosions.push(new Explosion(player.cx,player.cy,false));
           }
-        }else{
-          explosions.push(new Explosion(b.cx,b.cy,false));
         }
       }
     }
