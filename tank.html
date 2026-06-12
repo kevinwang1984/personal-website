@@ -293,7 +293,7 @@ function createGame(){
   return{
     map,wallHp,player,
     enemies:[],bullets:[],explosions:[],
-    score:0,lives:3,wave:0,
+    score:0,lives:4,wave:0,
     enemiesSpawned:0,enemiesKilled:0,
     killCounts:{FAST:0,MEDIUM:0,HEAVY:0},
     spawnTimer:0,spawnInterval:3000,
@@ -422,7 +422,7 @@ function update(g,now){
           if(g.lives<=0){player.alive=false;g.state='gameover'}
           else{
             player.x=4*TILE+4;player.y=12*TILE+4;player.dir=DIR.UP;
-            player.hp=PLAYER_MAX_HP;player.invincible=120;
+            player.hp=PLAYER_MAX_HP;player.invincible=120;player.alive=true;
           }
         }
       }
