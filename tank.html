@@ -245,7 +245,7 @@ class Bullet{
 
 class Explosion{
   constructor(x,y,big){this.x=x;this.y=y;this.radius=big?24:16;this.maxRadius=big?28:18;this.life=1;this.alive=true}
-  update(){this.life-=0.04;if(this.life<=0){this.alive=false;return}this.radius+=(this.maxRadius-this.radius)*0.2}
+  update(){this.life-=0.4;if(this.life<=0){this.alive=false;return}this.radius=this.maxRadius}
   draw(ctx){
     if(!this.alive) return;
     const a=this.life;
@@ -393,7 +393,8 @@ function update(g,now){
       }
     }
   }
-  g.bullets=g.bullets.filter(b=>b.alive);
+  // Remove bullets from dead tanks and filter alive
+  g.bullets=g.bullets.filter(b=>b.alive&&(b.isPlayer||(b.tank&&b.tank.alive)));
   g.explosions=explosions.filter(e=>e.alive);
   // Spawn
   g.spawnTimer+=16;
