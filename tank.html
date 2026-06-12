@@ -274,6 +274,7 @@ function createGame(){
     spawnPositions:[[1*TILE+4,1*TILE+4],[9*TILE+4,1*TILE+4],[17*TILE+4,1*TILE+4]],
     nextWave(){
       this.wave++;this.enemiesSpawned=0;this.enemiesKilled=0;
+      this.bullets=[];  // Clear all bullets to prevent orphaned projectiles
       // Heal some walls
       for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
         if(MAP_TEMPLATE[r][c]===1&&this.map[r][c]===0&&Math.random()<0.3){
