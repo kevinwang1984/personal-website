@@ -104,7 +104,34 @@ const MAP_TEMPLATE=[
   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 ];
 
+// ===================== Map Generator =====================
+function generateMap(wave){
+  const map=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  for(let c=0;c<COLS;c++){map[0][c]=2;map[ROWS-1][c]=2}
+  for(let r=0;r<ROWS;r++){map[r][0]=2;map[r][COLS-1]=2}
+  // Base
+  map[13][9]=3;map[13][10]=3;
+  // Base protection
+  map[12][8]=1;map[12][9]=1;map[12][10]=1;map[12][11]=1;
+  map[13][7]=1;map[13][8]=1;map[13][11]=1;map[13][12]=1;
+  // Forbidden cells (clear spawns)
+  const forb=new Set();
+  forb.add('1,1');forb.add('9,1');forb.add('17,1');
+  forb.add('4,12');
+  for(let r=11;r<=13;r++)for(let c=6;c<=13;c++)forb.add(r+','+c);
+  // Random walls
+  const n=Math.floor(10+wave*2.5);
+  const types=[1,1,1,1,4,4,5,5];
+  for(let i=0;i<n;i++){
+    let r,c,k;
+    do{r=2+Math.floor(Math.random()*11);c=2+Math.floor(Math.random()*16);k=r+','+c}
+    while(map[r][c]!==0||forb.has(k));
+    map[r][c]=types[Math.floor(Math.random()*types.length)];
+  }
+  return map;
+}
 // ===================== Wall HP =====================
+
 const WALL_INIT_HP={1:3,4:9};
 function initWallHp(map){
   const hp={};
@@ -268,19 +295,21 @@ function createGame(){
     enemies:[],bullets:[],explosions:[],
     score:0,lives:3,wave:0,
     enemiesSpawned:0,enemiesKilled:0,
+    killCounts:{FAST:0,MEDIUM:0,HEAVY:0},
     spawnTimer:0,spawnInterval:3000,
-    state:'playing',keys:{},
+    state:'playing',stateTimer:0,keys:{},
     ENEMIES_PER_WAVE:10,MAX_ACTIVE_ENEMIES:4,
     spawnPositions:[[1*TILE+4,1*TILE+4],[9*TILE+4,1*TILE+4],[17*TILE+4,1*TILE+4]],
     nextWave(){
       this.wave++;this.enemiesSpawned=0;this.enemiesKilled=0;
-      this.bullets=[];  // Clear all bullets to prevent orphaned projectiles
-      // Heal some walls
-      for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-        if(MAP_TEMPLATE[r][c]===1&&this.map[r][c]===0&&Math.random()<0.3){
-          this.map[r][c]=1;this.wallHp[r+','+c]=WALL_INIT_HP[1];
-        }
-      }
+      this.bullets=[];this.explosions=[];
+      this.enemies=[];
+      this.map=generateMap(this.wave);
+      this.wallHp=initWallHp(this.map);
+      this.player.x=4*TILE+4;this.player.y=12*TILE+4;
+      this.player.dir=DIR.UP;this.player.hp=PLAYER_MAX_HP;
+      this.player.alive=true;this.player.invincible=60;
+      this.spawnTimer=0;
     },
     spawnEnemy(now){
       if(this.enemiesSpawned>=this.ENEMIES_PER_WAVE) return;
@@ -302,6 +331,17 @@ function createGame(){
 
 // ===================== Update =====================
 function update(g,now){
+  // --- State Machine ---
+  if(g.state==='waveIntro'){
+    g.stateTimer--;
+    if(g.stateTimer<=0) g.state='playing';
+    return;
+  }
+  if(g.state==='waveComplete'){
+    g.stateTimer--;
+    if(g.stateTimer<=0){g.nextWave();g.state='waveIntro';g.stateTimer=50}
+    return;
+  }
   if(g.state!=='playing') return;
   const{map,wallHp,player,enemies,explosions}=g;
   // Player input
@@ -367,6 +407,7 @@ function update(g,now){
           b.alive=false;
           if(e.takeDamage(b.pDamage)){
             g.score+=e.type.score;g.enemiesKilled++;
+            g.killCounts[e.type.id.toUpperCase()]++;
             explosions.push(new Explosion(e.cx,e.cy,true));
           }
           break;
@@ -395,7 +436,7 @@ function update(g,now){
   if(g.spawnTimer>=g.spawnInterval){g.spawnTimer=0;g.spawnEnemy(now)}
   // Wave check
   if(g.enemiesKilled>=g.ENEMIES_PER_WAVE&&g.enemies.filter(e=>e.alive).length===0){
-    g.nextWave();
+    g.state='waveComplete';g.stateTimer=300;
     explosions.push(new Explosion(W/2,H/2,true));
   }
 }
@@ -473,7 +514,40 @@ function render(g){
       ctx.beginPath();ctx.arc(x+20,y+20,15,0,Math.PI*2);ctx.fill();
     }
   }
-  // Bullet trail sparkles near wall hits
+  // Wave Complete screen
+  if(g.state==='waveComplete'){
+    ctx.fillStyle='rgba(0,0,0,0.65)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fbbf24';ctx.font='bold 36px "Courier New",monospace';ctx.textAlign='center';
+    ctx.fillText('第 '+g.wave+' 关 完成!',W/2,120);
+    ctx.fillStyle='#ccc';ctx.font='18px "Courier New",monospace';
+    const kills=[['FAST','快速侦察兵','#22d3ee'],['MEDIUM','标准坦克','#ef4444'],['HEAVY','重型坦克','#8b5cf6']];
+    kills.forEach(([k,label,color],i)=>{
+      const cnt=g.killCounts[k]||0;
+      ctx.fillStyle=color;ctx.fillRect(W/2-120,170+i*38,16,16);
+      ctx.fillStyle='#ccc';ctx.textAlign='left';
+      ctx.fillText(label,W/2-88,185+i*38);
+      ctx.fillStyle='#fff';ctx.textAlign='right';
+      ctx.fillText('× '+cnt,W/2+120,185+i*38);
+    });
+    ctx.fillStyle='#888';ctx.textAlign='center';
+    ctx.fillText('—',W/2,310);
+    ctx.fillStyle='#fff';ctx.font='bold 22px "Courier New",monospace';
+    ctx.fillText('总分: '+g.score,W/2,348);
+    ctx.fillStyle='rgba(255,255,255,0.4)';ctx.font='14px "Courier New",monospace';
+    ctx.fillText('按任意键进入下一关  ('+Math.ceil(g.stateTimer/60)+'s)',W/2,390);
+  }
+  // Wave Intro screen
+  if(g.state==='waveIntro'){
+    ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,W,H);
+    const progress=1-g.stateTimer/50;
+    const scale=0.5+progress*0.5;
+    ctx.save();ctx.translate(W/2,H/2);ctx.scale(scale,scale);
+    ctx.fillStyle='#fbbf24';ctx.font='bold 52px "Courier New",monospace';ctx.textAlign='center';
+    ctx.fillText('第 '+g.wave+' 关',0,-8);
+    ctx.fillStyle='rgba(255,255,255,0.5)';ctx.font='18px "Courier New",monospace';
+    ctx.fillText('准备迎战',0,36);
+    ctx.restore();
+  }
   // Game over
   if(g.state==='gameover'){
     ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,W,H);
@@ -496,12 +570,17 @@ let animFrame=null;
 function startGame(){
   if(animFrame)cancelAnimationFrame(animFrame);
   game=createGame();game.nextWave();
+  game.state='waveIntro';game.stateTimer=50;
   const loop=(now)=>{update(game,now);render(game);animFrame=requestAnimationFrame(loop)};
   animFrame=requestAnimationFrame(loop);
 }
 document.addEventListener('keydown',e=>{
   if(game)game.keys[e.key]=true;
   if(e.key==='r'||e.key==='R')startGame();
+  if(game&&game.state==='waveComplete'){
+    game.nextWave();game.state='waveIntro';game.stateTimer=50;
+    return;
+  }
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
 });
 document.addEventListener('keyup',e=>{if(game)game.keys[e.key]=false});
